@@ -1,26 +1,33 @@
 let display = document.getElementById("display")
 
-// update display
-document.querySelectorAll('.buttons').forEach(item => {
-    item.addEventListener('click', event => {
-      var numberClicked = event.target.innerText
-      display.innerText += numberClicked
-    })
-  })
+let buttons = Array.from(document.getElementsByClassName('buttons'))
 
-//   clear
-document.getElementById("clear").addEventListener("click", function clear(e) {
-    display.innerText = ""
-})
-
-// equals
-document.getElementById("equalsButton").addEventListener("click", function problemEquals(e) {
-    const answer = eval(display.innerText.slice(0, length-1));
-    console.log(answer);
-    display.innerText = answer;
-} )
-
-// backspace *** i did length-2 to delete the arrow and the most recent input.
-document.getElementById("backspace").addEventListener("click", function backspace(e) {
-    display.innerText = display.innerText.slice(0, length-2)
-})
+buttons.map(button => {
+    button.addEventListener('click', (e) => {
+        switch(e.target.innerText) {
+            // clear button
+            case 'C':
+                display.innerText = '';
+                break;
+                // backspace button
+            case '←':
+                if(display.innerText) {
+                    display.innerText = display.innerText.slice(0,-1)
+                }
+                break;
+                // equals button
+            case '=':
+                // error handling
+                try {
+                    // eval is a built-in javascript function
+                    display.innerText = eval(display.innerText)
+                    // runs catch block if there is an error when executing eval function.
+                } catch {
+                    display.innerText = "error";
+                }
+                break;
+            default:
+                display.innerText += e.target.innerText
+        }
+    });
+} );
